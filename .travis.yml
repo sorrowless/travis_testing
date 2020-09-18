@@ -8,26 +8,30 @@ branches:
     - master
     - staging
 stages:
-  - name: build
-    if: type != pull_request
   - name: test
-    if: type != pull_request
+    if: type == pull_request
   - name: deploy
-    if: type != pull_request and branch = staging
+    if: type != pull_request
 install: skip
+before_deploy: |
+  echo "This is called before deploy"
+  echo "Saved before deploy" > before_deploy.result
 
 jobs:
   include:
-    - stage: build
-      name: "Test build"
-      script: |
-        echo "Build passed" > build.result
     - stage: test
-      name: "Test after build"
+      name: "Test stage"
       script: |
-        cat build.result
+        echo "Run test stage"
     - stage: deploy
-      name: "Deploy code to target servers"
+      name: "Deploy code to production servers"
+      if: branch = master
       script: |
-        echo "Never run"
-
+        echo "Run deploy on master branch"
+        cat before_deploy.result
+    - stage: deploy
+      name: "Deploy code to staging servers"
+      if: branch = staging
+      script: |
+        echo "Run deploy on staging branch"
+        cat before_deploy.result
