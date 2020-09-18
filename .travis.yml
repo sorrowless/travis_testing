@@ -1,0 +1,33 @@
+dist: bionic
+language: python
+python:
+  - "3.7"
+cache: pip
+branches:
+  only:
+    - master
+    - staging
+stages:
+  - name: build
+    if: type != pull_request
+  - name: test
+    if: type != pull_request
+  - name: deploy
+    if: type != pull_request and branch = staging
+install: skip
+
+jobs:
+  include:
+    - stage: build
+      name: "Test build"
+      script: |
+        echo "Build passed" > build.result
+    - stage: test
+      name: "Test after build"
+      script: |
+        cat build.result
+    - stage: deploy
+      name: "Deploy code to target servers"
+      script: |
+        echo "Never run"
+
