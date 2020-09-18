@@ -26,12 +26,12 @@ jobs:
     - stage: deploy
       name: "Deploy code to production servers"
       if: branch = master
-      script: |
+      deploy: |
         echo "Run deploy on master branch"
         cat before_deploy.result
     - stage: deploy
       name: "Deploy code to staging servers"
       if: branch = staging
-      script: |
+      deploy: |
         echo "Run deploy on staging branch"
         cat before_deploy.result
