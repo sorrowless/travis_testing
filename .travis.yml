@@ -1,3 +1,4 @@
+os: linux
 dist: bionic
 language: python
 python:
@@ -26,12 +27,16 @@ jobs:
     - stage: deploy
       name: "Deploy code to production servers"
       if: branch = master
-      deploy: |
-        echo "Run deploy on master branch"
-        cat before_deploy.result
+      deploy:
+        provider: script
+        script: |
+          echo "Run deploy on master branch"
+          cat before_deploy.result
     - stage: deploy
       name: "Deploy code to staging servers"
       if: branch = staging
-      deploy: |
-        echo "Run deploy on staging branch"
-        cat before_deploy.result
+      deploy:
+        provider: script
+        script: |
+          echo "Run deploy on staging branch"
+          cat before_deploy.result
