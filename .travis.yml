@@ -30,7 +30,7 @@ jobs:
         echo "Saved before deploy" > before_deploy.result
       script: echo "Starting deployment"
       deploy:
-        skip_cleanup: true
+        cleanup: false
         provider: script
         script: |
           echo "Run deploy on staging branch"
