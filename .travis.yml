@@ -28,6 +28,7 @@ jobs:
       before_deploy: |
         echo "This is called before deploy"
         echo "Saved before deploy" > before_deploy.result
+      script: echo "Starting deployment"
       deploy:
         provider: script
         script: |
