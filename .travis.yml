@@ -14,10 +14,6 @@ stages:
   - name: deploy
     if: type != pull_request
 install: skip
-script: echo
-before_deploy: |
-  echo "This is called before deploy"
-  echo "Saved before deploy" > before_deploy.result
 
 jobs:
   include:
@@ -25,19 +21,23 @@ jobs:
       name: "Test stage"
       script: |
         echo "Run test stage"
-    - stage: deploy
+    - &deploy-stage
+      stage: deploy
+      name: "Deploy code to staging servers"
+      if: branch = staging
+      before_deploy: |
+        echo "This is called before deploy"
+        echo "Saved before deploy" > before_deploy.result
+      deploy:
+        provider: script
+        script: |
+          echo "Run deploy on staging branch"
+          cat before_deploy.result
+    - <<: *deploy-stage
       name: "Deploy code to production servers"
       if: branch = master
       deploy:
         provider: script
         script: |
           echo "Run deploy on master branch"
-          cat before_deploy.result
-    - stage: deploy
-      name: "Deploy code to staging servers"
-      if: branch = staging
-      deploy:
-        provider: script
-        script: |
-          echo "Run deploy on staging branch"
           cat before_deploy.result
