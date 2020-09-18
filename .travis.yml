@@ -25,21 +25,15 @@ jobs:
       stage: deploy
       name: "Deploy code to staging servers"
       if: branch = staging
-      before_deploy: |
+      before_script: |
         echo "This is called before deploy"
         echo "Saved before deploy" > before_deploy.result
-      script: echo "Starting deployment"
-      deploy:
-        cleanup: false
-        provider: script
-        script: |
-          echo "Run deploy on staging branch"
-          cat before_deploy.result
+      script: |
+        echo "Run deploy on staging branch"
+        cat before_deploy.result
     - <<: *deploy-stage
       name: "Deploy code to production servers"
       if: branch = master
-      deploy:
-        provider: script
-        script: |
-          echo "Run deploy on master branch"
-          cat before_deploy.result
+      script: |
+        echo "Run deploy on master branch"
+        cat before_deploy.result
