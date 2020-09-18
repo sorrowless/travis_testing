@@ -14,6 +14,7 @@ stages:
   - name: deploy
     if: type != pull_request
 install: skip
+script: echo
 before_deploy: |
   echo "This is called before deploy"
   echo "Saved before deploy" > before_deploy.result
