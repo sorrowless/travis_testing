@@ -23,18 +23,20 @@ jobs:
         echo "Run test stage"
     - &deploy-stage
       stage: deploy
+      env: BRANCH=staging
       name: "Deploy code to staging servers"
       if: branch = staging
       before_script: |
         echo "This is called before deploy"
         mkdir dir
         cd dir
-        echo "Saved before deploy" > before_deploy.result
+        echo "Saved before deploy on branch $BRANCH" > before_deploy.result
       script: |
         echo "Run deploy on staging branch"
         cat before_deploy.result
     - <<: *deploy-stage
       name: "Deploy code to production servers"
+      env: BRANCH=production
       if: branch = master
       script: |
         echo "Run deploy on master branch"
